@@ -1,0 +1,55 @@
+# 工作流名称
+name: Deploy Flutter Web to GitHub Pages
+
+# 触发条件：当代码推送到 main 分支时触发
+on:
+  push:
+    branches:
+      - main  # 或者 master，根据你的主分支名修改
+
+jobs:
+  build_and_deploy:
+    # 运行环境
+    runs-on: ubuntu-latest
+
+    steps:
+      # 步骤 1: 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 步骤 2: 设置 Flutter 环境
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' # 或者 'beta', 'dev'
+
+      # 步骤 3: 安装项目依赖
+      - name: Install dependencies
+        run: flutter pub get
+
+      # 步骤 4: 解决 Flutter Web 路由导致的 404 问题 (可选但强烈建议)
+      # 这个技巧是将 index.html 复制为 404.html。
+      # 当用户访问一个不存在的路径时，GitHub Pages 会返回 404.html，
+      # 这实际上加载了你的 Flutter 应用，然后 Flutter 的路由系统就能接管，从而正确显示页面。
+      - name: Prepare for deployment
+        run: |
+          if [ -f "web/404.html" ]; then
+            echo "404.html already exists"
+          else
+            cp web/index.html web/404.html
+          fi
+
+      # 步骤 5: 构建 Web 应用
+      # 使用 ${{ github.repository }} 动态获取仓库名，无需硬编码
+      - name: Build Flutter Web
+        run: flutter build web --release --base-href /${{ github.event.repository.name }}/
+
+      # 步骤 6: 部署到 gh-pages 分支
+      # 使用一个非常流行的 action 来简化部署
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # GitHub Actions 会自动创建一个 GITHUB_TOKEN，无需手动配置
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # 需要部署的文件夹，即 Flutter Web 的构建产物目录
+          publish_dir: ./build/web
