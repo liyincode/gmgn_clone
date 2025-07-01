@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gmgn_app/screens/login/login_dialog.dart';
+import 'package:gmgn_app/screens/login/signup_dialog.dart';
 import 'package:gmgn_app/services/auth_service.dart';
 import 'package:gmgn_app/theme/app_colors.dart';
 import 'package:gmgn_app/theme/app_text_styles.dart';
@@ -272,7 +273,7 @@ class _MainHeaderState extends State<MainHeader> {
           onPressed: () {
              showCustomFadeDialog(
               context: context,
-              child: const LoginDialog(),
+              child: const SignUpDialog(),
             );
           },
           style: OutlinedButton.styleFrom(
@@ -305,4 +306,4 @@ class _MainHeaderState extends State<MainHeader> {
       ],
     );
   }
-}
+  }
