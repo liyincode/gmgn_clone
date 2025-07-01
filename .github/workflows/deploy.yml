@@ -12,6 +12,9 @@ jobs:
     # 运行环境
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       # 步骤 1: 拉取代码
       - name: Checkout code
