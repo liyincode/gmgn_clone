@@ -52,4 +52,10 @@ class AppColors {
   // **新增**: 表头颜色
   static const Color tableHeaderBackground = Color(0xFF111213);
   static const Color tableHeaderText = Color(0xFF5D6466);
+
+  // **新增**: 输入框边框颜色
+  static const Color inputBorder = Color(0xFF1F2024);
+
+  // **新增**: 设置项标签颜色
+  static const Color settingLabel = Color(0xFF7B8385);
 }

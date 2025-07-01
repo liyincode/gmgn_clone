@@ -743,17 +743,20 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
     return Row(
       children: [
         _buildActionButton(
+          context,
           'Copy trade',
           icon: Icons.account_balance_wallet_outlined,
         ),
         const SizedBox(width: 8),
         _buildActionButton(
+          context,
           'Track',
           icon: Icons.person_add_alt_1_outlined,
           isPrimary: true,
         ),
         const SizedBox(width: 8),
         _buildActionButton(
+          context,
           'Share',
           icon: Icons.ios_share_outlined,
         ),
@@ -761,9 +764,17 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
     );
   }
 
-  Widget _buildActionButton(String text, {required IconData icon, bool isPrimary = false}) {
+ // **核心修改**: 在 _buildActionButton 中处理点击事件
+  Widget _buildActionButton(BuildContext context, String text, {required IconData icon, bool isPrimary = false}) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        // 当点击的是 "Copy trade" 按钮时
+        if (text == 'Copy trade') {
+          // 打开 endDrawer
+          Scaffold.of(context).openEndDrawer();
+        }
+        // 你可以在这里为其他按钮添加点击事件
+      },
       style: TextButton.styleFrom(
         backgroundColor: isPrimary ? Colors.white : const Color(0xFF2A2D31),
         foregroundColor: isPrimary ? Colors.black : Colors.white,
@@ -774,10 +785,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
         children: [
           Icon(icon, size: 18),
           const SizedBox(width: 8),
-          Text(
-            text,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
+          Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
         ],
       ),
     );
